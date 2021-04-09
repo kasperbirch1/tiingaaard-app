@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import {
   Select,
@@ -11,10 +11,13 @@ import MomentUtils from "@date-io/moment";
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import moment from "moment";
 import globalContext from "../context/Global/globalContext";
+import "react-date-range/dist/styles.css"; // main style file
+import "react-date-range/dist/theme/default.css"; // theme css file
+import { DateRangePicker } from "react-date-range";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
-    margin: theme.spacing(0.5),
+    margin: "1rem",
     minWidth: "175px",
   },
   DatePicker: {
@@ -29,27 +32,53 @@ const BookingNavigation = () => {
   const classes = useStyles();
   const { setFormData, data, clearData } = useContext(globalContext);
 
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+
   const initialFormState = {
     REJSETYPE: data?.REJSETYPE ? data.REJSETYPE : "",
     REJSEMÅL: data?.REJSEMÅL ? data.REJSEMÅL : "",
     HOTEL: data?.HOTEL ? data.HOTEL : "",
     TRANSPORT: data?.TRANSPORT ? data.TRANSPORT : "",
     REJSELÆNGDE: data?.REJSELÆNGDE ? data.REJSELÆNGDE : "",
-    FIRSTDATE: data?.FIRSTDATE ? data.FIRSTDATE : new Date(),
+    // FIRSTDATE: data?.FIRSTDATE ? data.FIRSTDATE : new Date(),
   };
 
-  const { handleSubmit, errors, control, reset } = useForm({
+  const { register, handleSubmit, errors, control, reset, setValue } = useForm({
     defaultValues: initialFormState,
   });
   const onSubmit = (data) => {
     setFormData(data);
   };
 
+  const selectionRange = {
+    startDate: startDate,
+    endDate: endDate,
+    key: "selection",
+  };
+
+  function handleSelect(ranges) {
+    console.log(
+      "🚀 ~ file: BookingNavigation.js ~ line 61 ~ handleSelect ~ ranges",
+      ranges
+    );
+    setStartDate(ranges.selection.startDate);
+    setEndDate(ranges.selection.endDate);
+    setValue("RANGEDATES", ranges);
+  }
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
       style={{ display: "flex", alignItems: "center", flexWrap: "wrap" }}
     >
+      <div style={{ width: "100%", marginBottom: "50px" }}>
+        <DateRangePicker
+          {...register("RANGEDATES")}
+          ranges={[selectionRange]}
+          onChange={handleSelect}
+        />
+      </div>
       <Controller
         name="REJSETYPE"
         control={control}
@@ -161,7 +190,7 @@ const BookingNavigation = () => {
               HOTEL: "",
               TRANSPORT: "",
               REJSELÆNGDE: "",
-              FIRSTDATE: new Date(),
+              // FIRSTDATE: new Date(),
             });
           }}
         >
