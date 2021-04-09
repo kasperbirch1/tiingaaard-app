@@ -13,7 +13,8 @@ import moment from "moment";
 import globalContext from "../context/Global/globalContext";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
-import { DateRangePicker } from "react-date-range";
+import { DateRangePicker, DateRange } from "react-date-range";
+import * as rdrLocales from "react-date-range/dist/locale";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -64,7 +65,10 @@ const BookingNavigation = () => {
     );
     setStartDate(ranges.selection.startDate);
     setEndDate(ranges.selection.endDate);
-    setValue("RANGEDATES", ranges);
+    setValue("RANGESDATE", {
+      startDate: ranges.selection.startDate.toDateString(),
+      endDate: ranges.selection.endDate.toDateString(),
+    });
   }
 
   return (
@@ -73,10 +77,14 @@ const BookingNavigation = () => {
       style={{ display: "flex", alignItems: "center", flexWrap: "wrap" }}
     >
       <div style={{ width: "100%", marginBottom: "50px" }}>
-        <DateRangePicker
+        <DateRange
           {...register("RANGEDATES")}
           ranges={[selectionRange]}
           onChange={handleSelect}
+          months={1}
+          direction="vertical"
+          scroll={{ enabled: true }}
+          locale={rdrLocales.da}
         />
       </div>
       <Controller
