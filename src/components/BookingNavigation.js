@@ -85,8 +85,8 @@ const BookingNavigation = () => {
     setStartDate(startDate);
     setEndDate(endDate);
     setValue("test", {
-      startDate,
-      endDate,
+      startDate: startDate?._d.toDateString(),
+      endDate: endDate?._d.toDateString(),
     });
   };
 
