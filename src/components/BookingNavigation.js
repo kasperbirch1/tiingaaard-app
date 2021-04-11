@@ -13,28 +13,35 @@ import moment from "moment";
 import globalContext from "../context/Global/globalContext";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
-import { DateRangePicker, DateRange } from "react-date-range";
+// import { DateRangePicker, DateRange } from "react-date-range";
 import * as rdrLocales from "react-date-range/dist/locale";
+import {
+  DateRangePicker,
+  SingleDatePicker,
+  DayPickerRangeController,
+} from "react-dates";
+import "react-dates/initialize";
+import "react-dates/lib/css/_datepicker.css";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: "1rem",
     minWidth: "175px",
   },
-  DatePicker: {
-    margin: theme.spacing(0.5),
-    minWidth: "175px",
-    height: "200px",
-    color: "red",
-  },
+  // DatePicker: {
+  //   margin: theme.spacing(0.5),
+  //   minWidth: "175px",
+  //   height: "200px",
+  //   color: "red",
+  // },
 }));
 
 const BookingNavigation = () => {
   const classes = useStyles();
   const { setFormData, data, clearData } = useContext(globalContext);
 
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+  // const [startDate, setStartDate] = useState(new Date());
+  // const [endDate, setEndDate] = useState(new Date());
 
   const initialFormState = {
     REJSETYPE: data?.REJSETYPE ? data.REJSETYPE : "",
@@ -52,24 +59,36 @@ const BookingNavigation = () => {
     setFormData(data);
   };
 
-  const selectionRange = {
-    startDate: startDate,
-    endDate: endDate,
-    key: "selection",
-  };
+  // const selectionRange = {
+  //   startDate: startDate,
+  //   endDate: endDate,
+  //   key: "selection",
+  // };
 
-  function handleSelect(ranges) {
-    console.log(
-      "🚀 ~ file: BookingNavigation.js ~ line 61 ~ handleSelect ~ ranges",
-      ranges
-    );
-    setStartDate(ranges.selection.startDate);
-    setEndDate(ranges.selection.endDate);
-    setValue("RANGESDATE", {
-      startDate: ranges.selection.startDate.toDateString(),
-      endDate: ranges.selection.endDate.toDateString(),
+  // function handleSelect(ranges) {
+  //   console.log(
+  //     "🚀 ~ file: BookingNavigation.js ~ line 61 ~ handleSelect ~ ranges",
+  //     ranges
+  //   );
+  //   setStartDate(ranges.selection.startDate);
+  //   setEndDate(ranges.selection.endDate);
+  //   setValue("RANGESDATE", {
+  //     startDate: ranges.selection.startDate.toDateString(),
+  //     endDate: ranges.selection.endDate.toDateString(),
+  //   });
+  // }
+
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [focusedInput, setFocusedInput] = useState(null);
+  const handleDatesChange = ({ startDate, endDate }) => {
+    setStartDate(startDate);
+    setEndDate(endDate);
+    setValue("test", {
+      startDate,
+      endDate,
     });
-  }
+  };
 
   return (
     <form
@@ -77,7 +96,7 @@ const BookingNavigation = () => {
       style={{ display: "flex", alignItems: "center", flexWrap: "wrap" }}
     >
       <div style={{ width: "100%", marginBottom: "50px" }}>
-        <DateRange
+        {/* <DateRange
           {...register("RANGEDATES")}
           ranges={[selectionRange]}
           onChange={handleSelect}
@@ -85,8 +104,9 @@ const BookingNavigation = () => {
           direction="vertical"
           scroll={{ enabled: true }}
           locale={rdrLocales.da}
-        />
+        /> */}
       </div>
+
       <Controller
         name="REJSETYPE"
         control={control}
@@ -160,7 +180,18 @@ const BookingNavigation = () => {
         )}
       />
 
-      <Controller
+      <DateRangePicker
+        {...register("test")}
+        startDate={startDate}
+        startDateId="tata-start-date"
+        endDate={endDate}
+        endDateId="tata-end-date"
+        onDatesChange={handleDatesChange}
+        focusedInput={focusedInput}
+        onFocusChange={(focusedInput) => setFocusedInput(focusedInput)}
+      />
+
+      {/* <Controller
         name="FIRSTDATE"
         control={control}
         render={({ field }) => (
@@ -182,7 +213,7 @@ const BookingNavigation = () => {
             />
           </MuiPickersUtilsProvider>
         )}
-      />
+      /> */}
 
       <div style={{ width: "100%" }}>
         <button type="submit" style={{}}>
