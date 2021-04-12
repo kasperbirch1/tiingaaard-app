@@ -7,7 +7,11 @@ const Hotels = () => {
   return (
     <div>
       <h1>hotels</h1>
-      {data && <pre>{JSON.stringify(data, null, 2)}</pre>}
+      {data ? (
+        <pre>{JSON.stringify(data, null, 2)}</pre>
+      ) : (
+        <p>Udfyld input feleter</p>
+      )}
     </div>
   );
 };
