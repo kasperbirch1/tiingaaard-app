@@ -8,7 +8,11 @@ import {
   InputLabel,
 } from "@material-ui/core";
 import MomentUtils from "@date-io/moment";
-import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+import {
+  DatePicker,
+  KeyboardDatePicker,
+  MuiPickersUtilsProvider,
+} from "@material-ui/pickers";
 import moment from "moment";
 import globalContext from "../context/Global/globalContext";
 import "react-date-range/dist/styles.css"; // main style file
@@ -106,7 +110,6 @@ const BookingNavigation = () => {
           locale={rdrLocales.da}
         /> */}
       </div>
-
       <Controller
         name="REJSETYPE"
         control={control}
@@ -148,7 +151,6 @@ const BookingNavigation = () => {
           </FormControl>
         )}
       />
-
       <Controller
         name="TRANSPORT"
         control={control}
@@ -179,8 +181,7 @@ const BookingNavigation = () => {
           </FormControl>
         )}
       />
-
-      <DateRangePicker
+      {/* <DateRangePicker
         {...register("test")}
         startDate={startDate}
         startDateId="tata-start-date"
@@ -189,9 +190,8 @@ const BookingNavigation = () => {
         onDatesChange={handleDatesChange}
         focusedInput={focusedInput}
         onFocusChange={(focusedInput) => setFocusedInput(focusedInput)}
-      />
-
-      {/* <Controller
+      /> */}
+      <Controller
         name="FIRSTDATE"
         control={control}
         render={({ field }) => (
@@ -213,7 +213,7 @@ const BookingNavigation = () => {
             />
           </MuiPickersUtilsProvider>
         )}
-      /> */}
+      />
 
       <div style={{ width: "100%" }}>
         <button type="submit" style={{}}>
