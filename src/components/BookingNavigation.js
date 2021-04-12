@@ -54,11 +54,8 @@ const BookingNavigation = () => {
     defaultValues: initialFormState,
   });
   const onSubmit = (data) => {
-    console.log(
-      "🚀 ~ file: BookingNavigation.js ~ line 58 ~ onSubmit ~ data",
-      data
-    );
-    setFormData(data);
+    alert(JSON.stringify(data, null, 2));
+    // setFormData(data);
   };
 
   // const selectionRange = {
@@ -117,7 +114,18 @@ const BookingNavigation = () => {
             render={({ field }) => (
               <FormControl variant="outlined" className={classes.formControl}>
                 <InputLabel id="REJSETYPE">REJSETYPE</InputLabel>
-                <Select {...field} labelId="REJSETYPE" label="REJSETYPE">
+                <Select
+                  {...field}
+                  onChange={(e) => {
+                    setValue("REJSETYPE", e.target.value);
+                    setFormData({
+                      ...data,
+                      REJSETYPE: e.target.value,
+                    });
+                  }}
+                  labelId="REJSETYPE"
+                  label="REJSETYPE"
+                >
                   <MenuItem value="winter">Vinter</MenuItem>
                   <MenuItem value="summer">Sommer</MenuItem>
                 </Select>
@@ -132,7 +140,18 @@ const BookingNavigation = () => {
             render={({ field }) => (
               <FormControl variant="outlined" className={classes.formControl}>
                 <InputLabel id="REJSEMÅL">REJSEMÅL</InputLabel>
-                <Select {...field} labelId="REJSEMÅL" label="REJSEMÅL">
+                <Select
+                  {...field}
+                  onChange={(e) => {
+                    setValue("REJSEMÅL", e.target.value);
+                    setFormData({
+                      ...data,
+                      REJSEMÅL: e.target.value,
+                    });
+                  }}
+                  labelId="REJSEMÅL"
+                  label="REJSEMÅL"
+                >
                   <MenuItem value="all">Alle hoteller</MenuItem>
                   <MenuItem value="ita">Italien</MenuItem>
                 </Select>
@@ -146,8 +165,19 @@ const BookingNavigation = () => {
             control={control}
             render={({ field }) => (
               <FormControl variant="outlined" className={classes.formControl}>
-                <InputLabel id="REJSEMÅL">HOTEL</InputLabel>
-                <Select {...field} labelId="HOTEL" label="HOTEL">
+                <InputLabel id="HOTEL">HOTEL</InputLabel>
+                <Select
+                  {...field}
+                  onChange={(e) => {
+                    setValue("HOTEL", e.target.value);
+                    setFormData({
+                      ...data,
+                      HOTEL: e.target.value,
+                    });
+                  }}
+                  labelId="HOTEL"
+                  label="HOTEL"
+                >
                   <MenuItem value="hotel1">Hotel Hotel 1</MenuItem>
                   <MenuItem value="hotel2">Hotel 2</MenuItem>
                   <MenuItem value="hotel3">Hotel 3</MenuItem>
@@ -164,7 +194,18 @@ const BookingNavigation = () => {
             render={({ field }) => (
               <FormControl variant="outlined" className={classes.formControl}>
                 <InputLabel id="TRANSPORT">TRANSPORT</InputLabel>
-                <Select {...field} labelId="TRANSPORT" label="TRANSPORT">
+                <Select
+                  {...field}
+                  onChange={(e) => {
+                    setValue("TRANSPORT", e.target.value);
+                    setFormData({
+                      ...data,
+                      TRANSPORT: e.target.value,
+                    });
+                  }}
+                  labelId="TRANSPORT"
+                  label="TRANSPORT"
+                >
                   <MenuItem value="TRANSPORT1">TRANSPORT 1</MenuItem>
                   <MenuItem value="TRANSPORT2">TRANSPORT 2</MenuItem>
                   <MenuItem value="TRANSPORT3">TRANSPORT 3</MenuItem>
@@ -181,7 +222,18 @@ const BookingNavigation = () => {
             render={({ field }) => (
               <FormControl variant="outlined" className={classes.formControl}>
                 <InputLabel id="REJSELÆNGDE">REJSELÆNGDE</InputLabel>
-                <Select {...field} labelId="REJSELÆNGDE" label="REJSELÆNGDE">
+                <Select
+                  {...field}
+                  onChange={(e) => {
+                    setValue("REJSELÆNGDE", e.target.value);
+                    setFormData({
+                      ...data,
+                      REJSELÆNGDE: e.target.value,
+                    });
+                  }}
+                  labelId="REJSELÆNGDE"
+                  label="REJSELÆNGDE"
+                >
                   <MenuItem value="REJSELÆNGDE1">REJSELÆNGDE 1</MenuItem>
                   <MenuItem value="REJSELÆNGDE2">REJSELÆNGDE 2</MenuItem>
                   <MenuItem value="REJSELÆNGDE3">REJSELÆNGDE 3</MenuItem>
@@ -212,6 +264,14 @@ const BookingNavigation = () => {
               control={control}
               render={({ field }) => (
                 <DatePicker
+                  {...field}
+                  onChange={(e) => {
+                    setValue("FIRSTDATE", e._d.toString());
+                    setFormData({
+                      ...data,
+                      FIRSTDATE: e._d.toString(),
+                    });
+                  }}
                   className={classes.formControl}
                   inputVariant="outlined"
                   variant="dialog"
@@ -224,7 +284,6 @@ const BookingNavigation = () => {
                   format="DD/MM/YYYY"
                   showTodayButton
                   rightArrowIcon
-                  {...field}
                 />
               )}
             />
@@ -233,9 +292,7 @@ const BookingNavigation = () => {
       </Grid>
 
       <div style={{ width: "100%" }}>
-        <button type="submit" style={{}}>
-          Submit
-        </button>
+        <button type="submit">Submit</button>
         <button
           type="button"
           onClick={() => {
