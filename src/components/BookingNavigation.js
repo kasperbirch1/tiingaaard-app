@@ -1,6 +1,13 @@
 import React, { useContext, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
+import MomentUtils from "@date-io/moment";
+import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+import moment from "moment";
+import globalContext from "../context/Global/globalContext";
+import { SingleDatePicker } from "react-dates";
+import "react-dates/initialize";
+import "react-dates/lib/css/_datepicker.css";
 import {
   Select,
   MenuItem,
@@ -9,21 +16,6 @@ import {
   InputLabel,
   Grid,
 } from "@material-ui/core";
-import MomentUtils from "@date-io/moment";
-import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
-import moment from "moment";
-import globalContext from "../context/Global/globalContext";
-// import "react-date-range/dist/styles.css"; // main style file
-// import "react-date-range/dist/theme/default.css"; // theme css file
-// import { DateRangePicker, DateRange } from "react-date-range";
-// import * as rdrLocales from "react-date-range/dist/locale";
-// import {
-//   DateRangePicker,
-//   SingleDatePicker,
-//   DayPickerRangeController,
-// } from "react-dates";
-// import "react-dates/initialize";
-// import "react-dates/lib/css/_datepicker.css";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -38,8 +30,11 @@ const BookingNavigation = () => {
   const MinWidth600 = useMediaQuery("(max-width:600px)");
   const { setFormData, data, clearData } = useContext(globalContext);
 
-  // const [startDate, setStartDate] = useState(new Date());
-  // const [endDate, setEndDate] = useState(new Date());
+  const [daysWithDot, setDaysWithDot] = useState([
+    "2021/04/15",
+    "2021/04/16",
+    "2021/04/20",
+  ]);
 
   const initialFormState = {
     REJSETYPE: data?.REJSETYPE ? data.REJSETYPE : "",
@@ -48,46 +43,43 @@ const BookingNavigation = () => {
     TRANSPORT: data?.TRANSPORT ? data.TRANSPORT : "",
     REJSELÆNGDE: data?.REJSELÆNGDE ? data.REJSELÆNGDE : "",
     FIRSTDATE: data?.FIRSTDATE ? data.FIRSTDATE : null,
+    // SECONDDATE: data?.SECONDDATE ? data.SECONDDATE : null,
   };
 
   const { register, handleSubmit, errors, control, reset, setValue } = useForm({
     defaultValues: initialFormState,
   });
+
   const onSubmit = (data) => {
     alert(JSON.stringify(data, null, 2));
     // setFormData(data);
   };
 
-  // const selectionRange = {
-  //   startDate: startDate,
-  //   endDate: endDate,
-  //   key: "selection",
-  // };
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [OneDate, setOneDate] = useState(null);
+  const [focusedInput, setFocusedInput] = useState(null);
+  const handleDatesChange = ({ startDate, endDate }) => {
+    setStartDate(startDate);
+    setEndDate(endDate);
+    setValue("test", {
+      startDate: startDate?._d.toDateString(),
+      // endDate: endDate?._d.toDateString(),
+    });
+  };
 
-  // function handleSelect(ranges) {
-  //   console.log(
-  //     "🚀 ~ file: BookingNavigation.js ~ line 61 ~ handleSelect ~ ranges",
-  //     ranges
-  //   );
-  //   setStartDate(ranges.selection.startDate);
-  //   setEndDate(ranges.selection.endDate);
-  //   setValue("RANGESDATE", {
-  //     startDate: ranges.selection.startDate.toDateString(),
-  //     endDate: ranges.selection.endDate.toDateString(),
-  //   });
-  // }
+  const renderDayInPicker = (
+    date,
+    selectedDate,
+    dayInCurrentMonth,
+    dayComponent
+  ) => {
+    if (daysWithDot.includes(date.format("YYYY/MM/DD"))) {
+      return <div style={{ backgroundColor: "red" }}>{dayComponent}</div>;
+    }
 
-  // const [startDate, setStartDate] = useState(null);
-  // const [endDate, setEndDate] = useState(null);
-  // const [focusedInput, setFocusedInput] = useState(null);
-  // const handleDatesChange = ({ startDate, endDate }) => {
-  //   setStartDate(startDate);
-  //   setEndDate(endDate);
-  //   setValue("test", {
-  //     startDate: startDate?._d.toDateString(),
-  //     endDate: endDate?._d.toDateString(),
-  //   });
-  // };
+    return dayComponent;
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -243,16 +235,7 @@ const BookingNavigation = () => {
             )}
           />
         </Grid>
-        {/* <DateRangePicker
-        {...register("test")}
-        startDate={startDate}
-        startDateId="tata-start-date"
-        endDate={endDate}
-        endDateId="tata-end-date"
-        onDatesChange={handleDatesChange}
-        focusedInput={focusedInput}
-        onFocusChange={(focusedInput) => setFocusedInput(focusedInput)}
-      /> */}
+
         <Grid item xs={12} sm={2}>
           <MuiPickersUtilsProvider
             utils={MomentUtils}
@@ -279,16 +262,36 @@ const BookingNavigation = () => {
                   cancelLabel={"Cancel"}
                   okLabel={"Ok"}
                   label="FIRSTDATE"
-                  clearable
+                  // clearable
                   placeholder="DD/MM/YYYY"
                   format="DD/MM/YYYY"
                   showTodayButton
                   rightArrowIcon
+                  renderDay={renderDayInPicker}
                 />
               )}
             />
           </MuiPickersUtilsProvider>
         </Grid>
+        {/* <Grid item xs={12} sm={2}>
+          <SingleDatePicker
+            {...register("SECONDDATE")}
+            date={OneDate}
+            focused={focusedInput}
+            onFocusChange={({ focused }) => {
+              setFocusedInput(focused);
+            }}
+            onDateChange={(e) => {
+              setOneDate(e);
+              setValue("SECONDDATE", e?._d ? e._d.toString() : null);
+              setFormData({
+                ...data,
+                SECONDDATE: e?._d ? e._d.toString() : null,
+              });
+            }}
+            showClearDate={true}
+          />
+        </Grid> */}
       </Grid>
 
       <div style={{ width: "100%" }}>
@@ -304,6 +307,7 @@ const BookingNavigation = () => {
               TRANSPORT: "",
               REJSELÆNGDE: "",
               FIRSTDATE: null,
+              // SECONDDATE: null,
             });
           }}
         >
