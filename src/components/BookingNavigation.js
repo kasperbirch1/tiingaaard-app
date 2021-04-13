@@ -5,9 +5,9 @@ import MomentUtils from "@date-io/moment";
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import moment from "moment";
 import globalContext from "../context/Global/globalContext";
-import { SingleDatePicker } from "react-dates";
-import "react-dates/initialize";
-import "react-dates/lib/css/_datepicker.css";
+// import { SingleDatePicker } from "react-dates";
+// import "react-dates/initialize";
+// import "react-dates/lib/css/_datepicker.css";
 import {
   Select,
   MenuItem,
