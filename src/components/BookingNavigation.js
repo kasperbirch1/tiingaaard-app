@@ -1,9 +1,11 @@
 import React, { useContext, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-import MomentUtils from "@date-io/moment";
+// import MomentUtils from "@date-io/moment";
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
-import moment from "moment";
+// import moment from "moment";
+import DateFnsUtils from "@date-io/date-fns";
+import { format } from "date-fns";
 import globalContext from "../context/Global/globalContext";
 // import { SingleDatePicker } from "react-dates";
 // import "react-dates/initialize";
@@ -30,10 +32,17 @@ const BookingNavigation = () => {
   const MinWidth600 = useMediaQuery("(max-width:600px)");
   const { setFormData, data, clearData } = useContext(globalContext);
 
-  const [daysWithDot, setDaysWithDot] = useState([
+  const [daysWithColor, setDaysWithColor] = useState([
     "2021/04/15",
     "2021/04/16",
     "2021/04/20",
+    "Tue Apr 20 2021",
+  ]);
+  const [daysWithColor2, setDaysWithColor2] = useState([
+    "2021/04/01",
+    "2021/04/12",
+    "2021/04/23",
+    "Wed Apr 28 2021",
   ]);
 
   const initialFormState = {
@@ -55,18 +64,18 @@ const BookingNavigation = () => {
     // setFormData(data);
   };
 
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
-  const [OneDate, setOneDate] = useState(null);
-  const [focusedInput, setFocusedInput] = useState(null);
-  const handleDatesChange = ({ startDate, endDate }) => {
-    setStartDate(startDate);
-    setEndDate(endDate);
-    setValue("test", {
-      startDate: startDate?._d.toDateString(),
-      // endDate: endDate?._d.toDateString(),
-    });
-  };
+  // const [startDate, setStartDate] = useState(null);
+  // const [endDate, setEndDate] = useState(null);
+  // const [OneDate, setOneDate] = useState(null);
+  // const [focusedInput, setFocusedInput] = useState(null);
+  // const handleDatesChange = ({ startDate, endDate }) => {
+  //   setStartDate(startDate);
+  //   setEndDate(endDate);
+  //   setValue("test", {
+  //     startDate: startDate?._d.toDateString(),
+  //     // endDate: endDate?._d.toDateString(),
+  //   });
+  // };
 
   const renderDayInPicker = (
     date,
@@ -74,9 +83,27 @@ const BookingNavigation = () => {
     dayInCurrentMonth,
     dayComponent
   ) => {
-    if (daysWithDot.includes(date.format("YYYY/MM/DD"))) {
-      return <div style={{ backgroundColor: "red" }}>{dayComponent}</div>;
+    // console.log(format(date, "yyyy-mm-dd"));
+
+    if (daysWithColor.includes(date.toDateString())) {
+      return (
+        <div style={{ backgroundColor: "red", pointerEvents: "none" }}>
+          {dayComponent}
+        </div>
+      );
     }
+
+    if (daysWithColor2.includes(date.toDateString())) {
+      return <div style={{ backgroundColor: "green" }}>{dayComponent}</div>;
+    }
+
+    // if (daysWithColor.includes(format(date, "yyyy/mm/dd"))) {
+    //   return <div style={{ backgroundColor: "red" }}>{dayComponent}</div>;
+    // }
+
+    // if (daysWithColor2.includes(format(date, "yyyy/mm/dd"))) {
+    //   return <div style={{ backgroundColor: "green" }}>{dayComponent}</div>;
+    // }
 
     return dayComponent;
   };
@@ -238,37 +265,40 @@ const BookingNavigation = () => {
 
         <Grid item xs={12} sm={2}>
           <MuiPickersUtilsProvider
-            utils={MomentUtils}
-            libInstance={moment}
-            locale={"da"}
+            // utils={MomentUtils}
+            // libInstance={moment}
+            // locale={"da"}
+            utils={DateFnsUtils}
           >
             <Controller
               name="FIRSTDATE"
               control={control}
-              render={({ field }) => (
-                <DatePicker
-                  {...field}
-                  onChange={(e) => {
-                    setValue("FIRSTDATE", e._d.toString());
-                    setFormData({
-                      ...data,
-                      FIRSTDATE: e._d.toString(),
-                    });
-                  }}
-                  className={classes.formControl}
-                  inputVariant="outlined"
-                  variant="dialog"
-                  hideTabs={false}
-                  cancelLabel={"Cancel"}
-                  okLabel={"Ok"}
-                  label="FIRSTDATE"
-                  // clearable
-                  placeholder="DD/MM/YYYY"
-                  format="DD/MM/YYYY"
-                  showTodayButton
-                  rightArrowIcon
-                  renderDay={renderDayInPicker}
-                />
+              render={({ field: { ref, ...rest } }) => (
+                <>
+                  <DatePicker
+                    {...rest}
+                    inputRef={ref}
+                    onChange={(value) => {
+                      setValue("FIRSTDATE", value.toDateString());
+                      setFormData({
+                        ...data,
+                        FIRSTDATE: value.toDateString(),
+                      });
+                    }}
+                    className={classes.formControl}
+                    inputVariant="outlined"
+                    variant="dialog"
+                    hideTabs={false}
+                    cancelLabel={"Cancel"}
+                    okLabel={"Ok"}
+                    label="FIRSTDATE"
+                    placeholder="DD/MM/YYYY"
+                    // format="DD/MM/YYYY"
+                    showTodayButton
+                    // rightArrowIcon
+                    renderDay={renderDayInPicker}
+                  />
+                </>
               )}
             />
           </MuiPickersUtilsProvider>
