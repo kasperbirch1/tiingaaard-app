@@ -1,4 +1,4 @@
-import { SET_LOADING, SET_DATA, CLEAR_DATA } from "../types";
+import { SET_LOADING, SET_DATA, CLEAR_DATA, SET_DESTINATIONS } from "../types";
 
 const globalReducer = (state, action) => {
   console.log(
@@ -11,13 +11,17 @@ const globalReducer = (state, action) => {
         ...state,
         loading: action.payload,
       };
+
+    case SET_DESTINATIONS:
+      return {
+        ...state,
+        destinations: action.payload,
+      };
     case SET_DATA:
-      localStorage.setItem("data", JSON.stringify(action.payload));
       return {
         ...state,
         data: action.payload,
       };
-
     case CLEAR_DATA:
       localStorage.removeItem("data");
       return {

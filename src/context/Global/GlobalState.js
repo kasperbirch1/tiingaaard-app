@@ -1,13 +1,13 @@
 import React, { useReducer } from "react";
 import axios from "axios";
-
 import GlobalContext from "./globalContext";
 import globalReducer from "./globalReducer";
 
-import { SET_LOADING, SET_DATA, CLEAR_DATA } from "../types";
+import { SET_LOADING, SET_DATA, CLEAR_DATA, SET_DESTINATIONS } from "../types";
 
 const GlobalState = (props) => {
   const initialState = {
+    destinations: null,
     data: JSON.parse(localStorage.getItem("data")),
     loading: false,
   };
@@ -21,25 +21,33 @@ const GlobalState = (props) => {
     });
   };
 
-  const fetchData = async () => {
+  const fetchDestinations = async () => {
     try {
       dispatch({
         type: SET_LOADING,
         payload: true,
       });
-      const response = await axios.get(
-        "https://jsonplaceholder.typicode.com/posts"
+
+      const token = await axios.get(
+        "https://thinggaard.dk/wp-json/thinggaard/v1/authentication"
       );
-      dispatch({
-        type: SET_DATA,
-        payload: response.data,
-      });
-      dispatch({
-        type: SET_LOADING,
-        payload: false,
-      });
+
+      if (token?.data?.result?.auth_token) {
+        const response = await axios.get(
+          `https://thinggaard.dk/wp-json/thinggaard/v1/destinations?token=${token?.data?.result?.auth_token}`
+        );
+
+        dispatch({
+          type: SET_DESTINATIONS,
+          payload: response.data.result,
+        });
+        dispatch({
+          type: SET_LOADING,
+          payload: false,
+        });
+      }
     } catch (error) {
-      alert(error);
+      console.log("fetchDestinations-error:", error);
       dispatch({
         type: SET_LOADING,
         payload: false,
@@ -56,9 +64,10 @@ const GlobalState = (props) => {
       value={{
         loading: state.loading,
         data: state.data,
-        fetchData,
+        destinations: state.destinations,
         clearData,
         setFormData,
+        fetchDestinations,
       }}
     >
       {props.children}

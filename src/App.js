@@ -1,13 +1,15 @@
-import BookingNavigation from "./components/BookingNavigation";
-import Hotels from "./components/Hotels";
+// import BookingNavigation from "./components/BookingNavigation";
+// import Hotels from "./components/Hotels";
+import TestNav from "./components/TestNav";
 import GlobalState from "./context/Global/GlobalState";
 
 const App = () => {
   return (
     <GlobalState>
       <div className="app">
-        <BookingNavigation />
-        <Hotels />
+        <TestNav />
+        {/* <BookingNavigation /> */}
+        {/* <Hotels /> */}
       </div>
     </GlobalState>
   );
