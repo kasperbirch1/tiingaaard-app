@@ -1,4 +1,10 @@
-import { SET_LOADING, SET_DATA, CLEAR_DATA, SET_DESTINATIONS } from "../types";
+import {
+  SET_LOADING,
+  SET_DATA,
+  CLEAR_DATA,
+  SET_DESTINATIONS,
+  SET_DESTINATION,
+} from "../types";
 
 const globalReducer = (state, action) => {
   console.log(
@@ -16,6 +22,11 @@ const globalReducer = (state, action) => {
       return {
         ...state,
         destinations: action.payload,
+      };
+    case SET_DESTINATION:
+      return {
+        ...state,
+        destination: action.payload,
       };
     case SET_DATA:
       return {

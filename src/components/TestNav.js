@@ -2,9 +2,12 @@ import React, { useContext, useEffect, useState } from "react";
 import globalContext from "../context/Global/globalContext";
 
 const TestNav = () => {
-  const { fetchDestinations, destinations } = useContext(globalContext);
-
-  const [value, setvalue] = useState("");
+  const {
+    fetchDestinations,
+    destinations,
+    destination,
+    setDestination,
+  } = useContext(globalContext);
 
   useEffect(() => {
     fetchDestinations();
@@ -12,14 +15,14 @@ const TestNav = () => {
 
   return (
     <>
-      value:
-      <pre>{JSON.stringify(value, null, 2)}</pre>
+      destination:
+      <pre>{JSON.stringify(destination, null, 2)}</pre>
       <form>
         {destinations && (
           <select
-            value={value}
+            value={destination}
             onChange={(e) => {
-              setvalue(e.target.value);
+              setDestination(e.target.value);
             }}
           >
             {destinations?.map((item, index) => (
@@ -30,8 +33,6 @@ const TestNav = () => {
           </select>
         )}
       </form>
-      fetchDestinations:
-      <pre>{JSON.stringify(destinations, null, 2)}</pre>
     </>
   );
 };

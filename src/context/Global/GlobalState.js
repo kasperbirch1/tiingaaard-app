@@ -3,11 +3,18 @@ import axios from "axios";
 import GlobalContext from "./globalContext";
 import globalReducer from "./globalReducer";
 
-import { SET_LOADING, SET_DATA, CLEAR_DATA, SET_DESTINATIONS } from "../types";
+import {
+  SET_LOADING,
+  SET_DATA,
+  CLEAR_DATA,
+  SET_DESTINATIONS,
+  SET_DESTINATION,
+} from "../types";
 
 const GlobalState = (props) => {
   const initialState = {
     destinations: null,
+    destination: "",
     data: JSON.parse(localStorage.getItem("data")),
     loading: false,
   };
@@ -55,6 +62,13 @@ const GlobalState = (props) => {
     }
   };
 
+  const setDestination = (data) => {
+    dispatch({
+      type: SET_DESTINATION,
+      payload: data,
+    });
+  };
+
   const clearData = () => {
     dispatch({ type: CLEAR_DATA });
   };
@@ -65,9 +79,11 @@ const GlobalState = (props) => {
         loading: state.loading,
         data: state.data,
         destinations: state.destinations,
+        destination: state.destination,
         clearData,
         setFormData,
         fetchDestinations,
+        setDestination,
       }}
     >
       {props.children}
